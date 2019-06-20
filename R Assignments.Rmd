@@ -1,0 +1,74 @@
+---
+title: "R Assignments"
+output: html_notebook
+---
+
+## Assignment 1: Working with **for loops** and **matrices**
+
+I have created the code for an empty matrix (matA) and a partially constructed **for loop**. I want you to use the **for loop** code to fill the matrix.
+
+```{r}
+matA = matrix(0, ncol = 5, nrow = 10)
+matA
+```
+```{r}
+for (i in 1:nrow(matA)){
+  matA[i,1] = #Get the current iteration of the loop
+  matA[i,2] = #Divide the current iteration of the loop by 100
+  matA[i,3] = #Take the cube root of column 2
+  matA[i,4] = #Take the mean of column 1, 2, and 3
+  matA[i,5] = #Construct an ifelse statement that is 1 if the mean is less than 0; otherwise, -1 
+  }
+```
+
+## Assignment 2: Making your own **for loop** with the US Women's National Team
+
+Here are two arrays of values: one representing goals scores, and the other time spent playing for each player on the US women's team in their last two matches. Create a **for loop** that will fill an empty matrix with the following:
+- Row 1: goals
+- Row 2: minutes played
+- Row 3: goals per minutes played
+- Row 4: 1 if scored goal; 0 otherwise
+
+You should end up with a matrix that looks like this:
+
+     [,1] [,2] [,3] [,4]
+[1,]   0   172   0   0
+
+```{r}
+shotsOnGoal = c(172,90,90,31,180,90,123,123,90,8,45,114,90,149,111,90,90,57,90,90,57)
+minPlayed = c(0,5,0,0,0,0,3,0,0,0,0,1,0,1,1,1,0,2,2,0,0)
+```
+
+Follow these steps:
+1. Create an empty matrix with the **matrix()** function that has 4 columns and the number of rows equal to the number of players (hint: try out the **length()** function)
+
+2. Create the basic structure of your **for loop** (hint: look at assignemnt 1)
+
+3. Add the name of each row of the matrix that you will be manipulating. Be careful with indexing! Remember it's variableName[row #, column #].
+
+4. Assign the values to each row
+
+5. Run it! If it doesn't work, troubleshoot. (hint: Google is a great source for figuring out what error messages mean)
+
+## Assignment 3: Download a dataset, analyze the features
+
+Next, we're going to look at a sleep deprivation dataset. In this study, subjects slept either 5 hours or 8 hours. They then completed a wide-range of cognitive tests. This file has accuracy data from one of the tests. I want you to figure out if sleep deprivation had an effect on accuracy in the test.
+
+First, download the data.
+
+```{r}
+#Load in the required library
+library(RCurl)
+#Download Data
+data<-read.csv(text=getURL("https://raw.githubusercontent.com/blairshevlin/hsProgram/master/2018_PeerNieuw_SleepSSST_Accuracy.csv"))
+
+```
+
+Next, I would like you to calculate the following:
+
+1. Mean and SD of accuracy variable (CorrResp_perc)
+2. Mean and SD of accuracy variable for the 5hr group
+3. Mean and SD of accuracy variable for 8hr group
+4. Run a t.test on the accuracy values between the 5hr group and 8hr group
+5. Create a variable containing the average accuracy for each subject
+6. Which subject had the highest average accuracy?
