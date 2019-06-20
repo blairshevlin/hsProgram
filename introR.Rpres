@@ -1,0 +1,542 @@
+Introduction to R
+========================================================
+author: Blair Shevlin
+date: 6.18.19
+autosize: true
+
+Who am I?
+========================================================
+
+Blair Shevlin, 28 years-old, 3rd Year Graduate Student
+
+- **Background:** Born in Philadelphia; BA in Psychology (Goucher College); MA in Experimental Psychology (Towson University)
+- **Hobbies:** Ultimate Frisbee, Music, RPGs
+- **Research interests:** computational modeling, value-based decision-making
+
+Who are you?
+========================================================
+
+- Name
+- Age
+- Where are you from?
+- Hobbies
+- BIG QUESTION
+
+What is R?
+========================================================
+
+R is a free, open-source, computational environment.
+
+With R, users can:
+
+- Analyze data
+- Create figures
+- Build and share functions
+- Much more!
+
+Example R Code
+========================================================
+
+```{r,eval=FALSE}
+oneNumber = 666
+
+manyNumbers = c(1,0,0,1,0,0,1,0,0)
+
+text = 'nerds'
+
+myFunction = function(x) return(x*2)
+```
+Creating variables
+========================================================
+```{r}
+favoriteFoods = c("pizza","sushi","oreos","penut butter")
+
+foodRatings = c(7,10,8,6)
+
+timesEatenLastWeek = c(2,0,5,10)
+```
+Creating dataframes
+========================================================
+```{r}
+foods = data.frame(Name = favoriteFoods, Rating = foodRatings, TimesEaten = timesEatenLastWeek)
+print(foods)
+
+```
+Creating new variables
+========================================================
+```{r}
+foods$ateLastWeek = ifelse(foods$TimesEaten>0,1,0)
+print(foods)
+```
+Logical Operators
+========================================================
+- + (Add)
+- - (Subtract)
+- * (Multiply)
+- / (Divide)
+- ^ or ** (Exponent)
+- < (Less Than)
+- > (Greater Than)
+
+More Logical Operators
+========================================================
+- <= (Less Than or equal to)
+- >= (Greater than or equal to)
+- == (Equal)
+- != (Not Equal)
+- !x (Not x)
+- x|y (x or y)
+- x&y (x and y)
+
+Try on your own
+========================================================
+Complete the following:
+
+1. Create a variable containing your top 5 favorite TV shows
+2. Create a variable with a rating of each of your favorite TV shows
+3. Combine these variables into a dataframe using the **data.frame()** function
+4. **Challenge:** create a new variable in your new dataframe that is equal to **0** when *less than* the average rating, and **1** when *greater than or equal to* the average rating
+
+Blair's favorite TV shows
+========================================================
+```{r}
+topShows = c("The Wire","Bojack Horseman","30 Rock","Trailer Park Boys","Deadwood")
+ratings = c(10,9,7,7,8)
+myFavShows = data.frame(Name = topShows, Ratings = ratings)
+print(myFavShows)
+```
+
+Blair's favorite TV shows
+========================================================
+```{r}
+myFavShows$bestShows = ifelse(myFavShows$Ratings >= mean(myFavShows$Ratings),1,0)
+print(myFavShows)
+```
+
+Saving/Loading data
+========================================================
+```{r}
+write.csv(myFavShows,"favoriteTVShows.csv", row.names = FALSE)
+
+myFavShowsOld<-read.csv("favoriteTVShows.csv")
+
+print(myFavShowsOld)
+```
+
+Matrices
+========================================================
+Sometimes, you want to store numbers to conduct some mathematical operations. Matrices work nicely!
+```{r}
+matA = matrix(0, ncol = 4, nrow = 4)
+matA
+```
+Matrices cont'd
+========================================================
+Filling a matrix
+```{r}
+row1 = rep(1,4)
+row2 = 5
+row3 = c(6:9)
+row4 = mean(c(row3))
+```
+Matrices cont'd
+========================================================
+Filling a matrix
+```{r}
+matA[1,] = row1 #rep(1,4)
+matA[2,] = row2 #5
+matA[3,] = row3 #c(6:9)
+matA[4,] = row4 #mean(c(row1,row2,row3))
+matA
+```
+
+
+Matrices cont'd
+========================================================
+Indexing items in a matrix is a little different. It's *matrixName*[*row number*, *column number*]
+```{r}
+matA[1,]
+matA[,1]
+matA[1,1]
+
+```
+
+for loops
+========================================================
+To automate, use **for loops**
+```{r}
+matB = matrix(0,ncol = 3, nrow = 5)
+count = 0
+for (i in 1:nrow(matB)){
+  #add 1 to count for each run through the for loop
+  count = count + 1 
+  matB[i,1] = count
+  matB[i,2] = count^2 
+  matB[i,3] = sqrt(matB[i,2])+matB[i,1]
+}
+```
+
+for loops: Results
+========================================================
+```{r}
+matB
+```
+
+Try on your own
+========================================================
+Complete the following:
+
+1. Create an empty 5 x 5 matrix using the **matrix()** function
+2. Using a **for loop**, complete the following:
+  - Row 1: get the current iteration of the loop
+  - Row 2: divide Row 1 by 2
+  - Row 3: multiple Row 1 by 5
+  - Row 4: get average of this column
+  - Row 5: get standard deviation of this column
+3. **Challenge:** round each cell to the nearest thousandths place
+
+
+Anwers
+========================================================
+```{r}
+mat = matrix(0, ncol = 5, nrow = 5)
+for (i in 1:5){
+  mat[1,i] = i
+  mat[2,i] = i/2
+  mat[3,i] = i*5
+  mat[4,i] = mean(mat[1:3,i])
+  mat[5,i] = sd(mat[1:3,i])
+}
+print(round(mat,3))
+```
+
+Using R to Answer Questions
+========================================================
+"What major should I choose?"
+- Which major has the highest average income after graduation?
+- Which major has the most employed graduates?
+- Which major has the highest celining income?
+- Which major has the highest floor income?
+
+Collecting Data
+========================================================
+![FiveThirtyEight](538.png)
+
+Collecting Data
+========================================================
+![Github](Github.png)
+
+
+Downloading Data
+========================================================
+```{r}
+#Load in the required library
+library(RCurl)
+#Download Data
+data<-read.csv(text=getURL("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv"))
+
+```
+
+Examining Your Data
+========================================================
+```{r,}
+data
+```
+
+Examining Your Data
+========================================================
+```{r}
+str(data)
+```
+
+Examining Your Data
+========================================================
+```{r}
+unique(data$Major)
+```
+
+Examining Your Data
+========================================================
+```{r}
+unique(data$Major_category)
+```
+
+Which major has the highest average income after graduation?
+========================================================
+```{r}
+#Find maximum median income
+max(data$Median)
+#Subsetting Data
+data$Major[which(data$Median==max(data$Median))]
+```
+
+Which major has the most employed graduates?
+========================================================
+```{r}
+#Find maximum median income
+maxEmployed = max(data$Employed)
+#Subset the data
+data$Major[which(data$Employed==maxEmployed)]
+```
+
+Which major has the highest celining income?
+========================================================
+```{r}
+#Find maximum income in the 75th percentile
+maxCeiling = max(data$P75th)
+#Subset the data
+data$Major[which(data$P75th==maxCeiling)]
+```
+
+Which major has the highest floor income?
+========================================================
+```{r}
+#Find maximum income in the 25th percentile
+maxFloor = max(data$P25th)
+#Subset the data
+data$Major[which(data$P25th==maxFloor)]
+```
+
+Try on your own
+========================================================
+Complete the following:
+
+1. Using the **which()** function, answer the following questions:
+  - Which *major cateogry* has the highest median salary?
+  - Which *major category* has the largest share of women?
+  - Which *major category* the most graduates with full time, year round jobs?
+ 
+2. **Challenge:** generate your own question and use the data find the answer 
+
+Answers
+========================================================
+```{r}
+#Which major cateogry has the highest median salary?
+data$Major_category[which(data$Median==max(data$Median))]
+
+```
+
+Answers
+========================================================
+```{r}
+#Which major category has the largest share of women?
+data = na.omit(data)
+data$Major_category[which(data$ShareWomen==max(data$ShareWomen))]
+```
+
+Answers
+========================================================
+```{r}
+#Which major category has the most grads with full time, year round jobs?
+data$Major_category[which(data$Full_time_year_round==max(data$Full_time_year_round))]
+```
+
+Bigger questions
+========================================================
+- Are male-dominated majors more likely to make more, on average, than female-dominated majors?
+- Are male-dominated majors more likely to be unemployed, on average, than female-dominated majors?
+
+How to answer Big Questions
+========================================================
+- Find a phenomenon you are trying to explain
+- Form an hypothesis
+- Collect data to test your hypothesis
+- Test your hypothesis
+- Revise and repeat
+
+Testing hypotheses
+========================================================
+Scientists build statistical models of real-world data to test hypotheses
+
+Imagine an engineer wishes to build a bridge across a river. Before building, she must:
+
+1. Collect data
+  + How other bridges are built 
+2. Use info to build a model
+  + Scaled-down version
+3. Test model
+  + Withstand wind by placing in wind tunnel
+
+Statistical Models
+========================================================
+Scientists build models of real-world processes to predict how things operate.
+
+Statistical models represent data collected.
+
+The degree to which statistical models resemble data is called **fit**.
+
+
+Model Fit
+========================================================
+![Bridges](bridge.png)
+
+Distributions of Data
+========================================================
+```{r, echo = F}
+x = seq(-5,5,length=100)
+hx = dnorm(x)
+
+plot(x,hx,type='l',lty=2,xlab="x value",ylab = "Density",main="Normal Distribution")
+```
+
+========================================================
+![Normal Distribution in the Real World](normDistributionHeightPhoto.jpg)
+
+Simple statistical models
+========================================================
+## The mean
+```{r, echo = F}
+
+x = seq(-5,5,length=100)
+hx = dnorm(x)
+plot(x,hx,type='l',lty=2,xlab="x value",ylab = "Density",main="Normal Distribution")
+abline(v=0, col = "red")
+```
+
+Assessing model fit
+========================================================
+Total error = sum of deviances
+<p>= $\sum$ ($x_{i}$-$\overline{x}$) = (-1.6)+(-0.6)+(0.4)+(0.4)+(1.4) = 0
+
+```{r, echo = FALSE}
+nFriends=c(1,2,3,3,4)
+teachers = c(1:5)
+teacherNames = c("Mr. Khanchandani","Ms. Wilder", "Mrs. Jones", "Mr. Li", "Mrs. Weiss")
+plot(teachers,nFriends,ylim = c(0,5), ylab = c("Number of Friends"), xlab = c("Teacher"),pch = 19)
+par(new=T)
+abline(h=mean(nFriends))
+lines(c(1,1),c(1,mean(nFriends)), lty = 2, col = "blue")
+lines(c(2,2),c(2,mean(nFriends)), lty = 2, col = "blue")
+lines(c(3,3),c(3,mean(nFriends)), lty = 2, col = "blue")
+lines(c(4,4),c(3,mean(nFriends)), lty = 2, col = "blue")
+lines(c(5,5),c(4,mean(nFriends)), lty = 2, col = "blue")
+
+```
+
+Assessing model fit
+========================================================
+Sum of squares (SS) =  $\sum$ ($x_{i}$-$\overline{x}$)^2
+<p> = (-1.6)^2 +(-0.6)^2 +(0.4)^2 +(0.4)^2 +(1.4)^2 = 5.20
+
+Standard deviation (sd) =  $$\sqrt{\frac{\sum(x_{i}-\overline{x})^2}{N}}$$
+<p> $$\sqrt{\frac{5.20}{4}}$$ = 1.14
+
+Putting it all together
+========================================================
+```{r}
+nFriends = c(1,2,3,3,4)
+mean(nFriends)
+sd(nFriends)
+```
+On average, my teachers have 2.6 friends (*SD*=1.14).
+
+On your own
+========================================================
+1. What is the mean and SD of median income among all *majors* in the **college-majors** dataset?
+2. Looking only at majors in the *Psychology & Social Work* major category, what is the mean and SD of the median income?
+3. Looking only at majors in the *Psychology & Social Work* major category, what is the mean and SD of the unemployment rate?
+4. **Challenge**: Choose a different major category, and answer questions 2 and 3.
+
+Answers: Q1
+========================================================
+```{r}
+mean(data$Median); sd(data$Median)
+```
+
+Answers: Q2
+========================================================
+```{r}
+mean(data$Median[data$Major_category == "Psychology & Social Work"])
+sd(data$Median[data$Major_category == "Psychology & Social Work"])
+```
+
+Answers: Q3
+========================================================
+```{r}
+mean(data$Unemployment_rate[data$Major_category == "Psychology & Social Work"])
+sd(data$Unemployment_rate[data$Major_category == "Psychology & Social Work"])
+```
+
+Answering our Big Questions
+========================================================
+- Are male-dominated majors more likely to make more, on average, than female-dominated majors?
+- Are male-dominated majors more likely to be unemployed, on average, than female-dominated majors?
+
+Do male-dominated majors make more than female-dominated ones?
+========================================================
+```{r}
+median(data$ShareWomen)
+
+data$MaleDom <- ifelse(data$ShareWomen < median(data$ShareWomen), 1, 0)
+
+mean(data$Median[data$MaleDom==1])
+mean(data$Median[data$MaleDom==0])
+
+```
+
+Test statistics
+========================================================
+Test statistics 
+<p> = $\frac{signal}{noise}$
+<p> = $\frac{variance~explained~by~model}{variance~explained~by~noise}$
+<p> = $\frac{effect}{error}$
+
+If a model is good, it can explain more variance than it can't explain. 
+
+
+The t-test
+========================================================
+The t-test is a test statistic for comparing two means. 
+- A and B are two groups
+- *m_A* and *m_B* are the group means
+- *n_A* and *n_B* are the group sizes
+
+*t* = $$\frac{(m_A + m_B)}{\sqrt{\frac{S^2}{n_A} + \frac{S^2}{n_B}}}$$
+
+S^2 = $$\frac{\sum(x-m_A)^2 + \sum(x-m_B)^2}{n_A + n_B - 2}$$
+
+The t-test cont'd
+========================================================
+One you get a **t-test value**, you read in a **t-test table** to find the critical value of the Student's t-distribution corresponding to your **significance level alpha**. The degrees of freedom (*df*) are:
+
+*df* = *n_A* + *n_B* - 2
+
+Student's t distribution
+========================================================
+![](studentsT.png)
+
+Do male-dominated majors make more than female-dominated ones?
+========================================================
+```{r}
+t.test(data$Median[data$MaleDom==1],
+                 data$Median[data$MaleDom==0])
+```
+
+Are male-dominated majors more likely to be unemployed female-dominated ones?
+========================================================
+```{r, echo = FALSE}
+
+t.test(data$Unemployment_rate[data$MaleDom==1],
+                 data$Unemployment_rate[data$MaleDom==0])
+```
+
+Are male-dominated majors more likely to be unemployed female-dominated ones?
+========================================================
+```{r}
+
+t.test(data$Unemployment_rate[data$MaleDom==1],
+                 data$Unemployment_rate[data$MaleDom==0])
+```
+
+
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+```
+
+
+```{r, echo=FALSE}
+plot(cars)
+```
